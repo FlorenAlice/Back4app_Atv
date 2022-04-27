@@ -1,0 +1,36 @@
+ Parse.initialize("ePwi5Lbo0yhCoPRbUmetjXaWmpd20xNfiNRo1B7r", "ObNNo6vbGV4yB2x16H7InTBMd2szLih62vi1vBHk");
+ Parse.serverURL = "https://parseapi.back4app.com/";
+
+let materias = [];
+const lista = document.getElementById("lista");
+
+function gerarLista() {
+    lista.innerHTML = "";
+    for (let i = 0; i < materias.length; ++i) {
+      // lista.innerHTML += `<li>${i}</li>`;
+      const li = document.createElement("li");
+      const txt = document.createTextNode(
+        `Nome: ${materias[i].nome} - Idade: ${materias[i].idade}`
+      );
+      li.appendChild(txt);
+      lista.appendChild(li);
+    }
+  }
+  const fetchMaterias = async () => {
+    const materias = Parse.Object.extend("Materias");
+    const query = new Parse.Query(materias);
+    try {
+      const results = await query.find();
+      materias = [];
+      for (const object of results) {
+        const nome = object.get("nome");
+        const inicio = object.get("inicio");
+        const nomeProfessor = object.get("nomeProfessor")
+        materias.push({ nome, inicio, nomeProfessor });
+      }
+      gerarLista();
+    } catch (error) {
+      console.error("Erro ao exibie os valores de Materias", error);
+    }
+  };
+  fetchMaterias();
